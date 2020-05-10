@@ -45,7 +45,7 @@ public class DebuggingMain {
             result = solver.solve(instance, 15);
             System.out.println(result.schedule.toString());
             
-            ResourceOrder order = new ResourceOrder(sched);
+           /* ResourceOrder order = new ResourceOrder(sched);
             System.out.println(order.toString());
             
             DescentSolver newsolver = new DescentSolver();            
@@ -53,7 +53,7 @@ public class DebuggingMain {
             Result result2 = newsolver.solve(instance, 15);
             Schedule sched2 = result2.schedule;
             ResourceOrder order2 = new ResourceOrder(sched2);
-            System.out.println(order2);
+            System.out.println(order2); */
         } catch (IOException e) {
             e.printStackTrace();
             System.exit(1);

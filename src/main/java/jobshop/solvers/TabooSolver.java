@@ -13,8 +13,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Vector;
 
-public class DescentSolver implements Solver {
-
+public class TabooSolver implements Solver {
     /** A block represents a subsequence of the critical path such that all tasks in it execute on the same machine.
      * This class identifies a block in a ResourceOrder representation.
      *
@@ -76,40 +75,72 @@ public class DescentSolver implements Solver {
         	Task task;
         	task = order.tasksByMachine[machine][t1];
         	order.tasksByMachine[machine][t1] = order.tasksByMachine[machine][t2];
-        	order.tasksByMachine[machine][t2] = task;
-        	//throw new UnsupportedOperationException();
+        	order.tasksByMachine[machine][t2] = task;        }
+    }
+    
+
+    
+    static class sTabou {
+        int[][] visited_tabou;
+        Instance instance;
+        sTabou(Instance instance) {
+        	 this.visited_tabou = new int[instance.numMachines][instance.numJobs];
+        	 this.instance = instance;
+             for(int m=0; m < instance.numMachines; m++)
+             {
+                 for(int j=0; j<instance.numJobs; j++) visited_tabou[m][j]=0;
+             }
         }
     }
-
+    
 
     @Override
     public Result solve(Instance instance, long deadline) {
     	GreedySolverLRPT solver_init = new GreedySolverLRPT();
     	Result result_init = solver_init.solve(instance, deadline);
-   
+
+    	sTabou ListTabou = new sTabou(instance);
 		Schedule best_solution = result_init.schedule;
+		Schedule best_tabou = result_init.schedule;
+   	 	int [] coord_tabou = new int [2];
 		ResourceOrder best_sol_order = new ResourceOrder(best_solution);
-		ResourceOrder previous_order = new ResourceOrder(best_solution);
 		ResourceOrder candidate_order = new ResourceOrder(best_solution);
 		int best_time = best_solution.makespan();
-		int idle = 0;
+		int best_tabou_time = best_solution.makespan();
+		int iterations =  1;
+		int max_iter = 20;
+		int dureeTabou = 3;
 		long time = System.currentTimeMillis();
-		while(System.currentTimeMillis()-time<deadline && idle < 3) {
+		while(System.currentTimeMillis()-time<deadline && iterations<max_iter) {
 			List<Block> block_list = blocksOfCriticalPath(best_sol_order);
 			for (Block b : block_list) {
 				List<Swap> swaps = neighbors(b);
+				best_tabou = candidate_order.toSchedule();
+				best_tabou_time = candidate_order.toSchedule().makespan();
 				for(Swap s : swaps) {
 					s.applyOn(candidate_order);
-					if(best_time>candidate_order.toSchedule().makespan()) {
-						best_solution = candidate_order.toSchedule();
-						best_time = candidate_order.toSchedule().makespan();
-						best_sol_order = candidate_order;
+					if(best_tabou_time>candidate_order.toSchedule().makespan()) {
+						if(ListTabou.visited_tabou[s.t1][s.t2]<iterations) {
+						best_tabou = candidate_order.toSchedule();
+						best_tabou_time = candidate_order.toSchedule().makespan();
+						coord_tabou[0] = s.t1;
+						coord_tabou[1] = s.t2;
+						}
+						else if(best_tabou_time<best_time) {
+							best_solution = candidate_order.toSchedule();
+							best_time = candidate_order.toSchedule().makespan();
+							best_sol_order = candidate_order;
+							best_tabou = candidate_order.toSchedule();
+							best_tabou_time = candidate_order.toSchedule().makespan();
+							coord_tabou[0] = s.t1;
+							coord_tabou[1] = s.t2;
+						}
 					}
+
+					ListTabou.visited_tabou[coord_tabou[0]][coord_tabou[1]]=dureeTabou+iterations;
 				}
 			}
-			if(previous_order == best_sol_order) idle++;
-			else idle = 0;
-			previous_order = best_sol_order;
+			iterations++;
 		}
 		return new Result(instance, best_solution, Result.ExitCause.Blocked);
 

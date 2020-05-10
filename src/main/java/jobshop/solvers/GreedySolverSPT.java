@@ -11,10 +11,10 @@ import java.util.Vector;
 public class GreedySolverSPT implements Solver {
 		
 	private Task spt(Vector<Task> task, Instance instance){
-		//priorité à la tâche e au job ayant la plus longue durée restante
 		Task current = task.firstElement();
 		Task best = current;
 		for(int j=1; j<task.size(); j++) {
+			current = task.get(j);
 			if(instance.duration(current) < instance.duration(best)) {
 				best = current;
 			}
@@ -25,11 +25,9 @@ public class GreedySolverSPT implements Solver {
 		
 	@Override
 	public Result solve(Instance instance, long deadline) {
-		//initialisations
 		Vector<Task> realisable = new Vector<Task>();
 		ResourceOrder sol = new ResourceOrder(instance);
 		
-		//init
 		for(int j=0; j<instance.numJobs; j++){
 			realisable.add(new Task(j,0));
 		}

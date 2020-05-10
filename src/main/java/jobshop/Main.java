@@ -22,6 +22,10 @@ public class Main {
     private static HashMap<String, Solver> solvers;
     static {
         solvers = new HashMap<>();
+        solvers.put("spt", new GreedySolverSPT());
+        solvers.put("lrpt", new GreedySolverLRPT());
+        solvers.put("est_lrpt", new GreedySolverEST_LRPT());
+        solvers.put("est_spt", new GreedySolverEST_SPT());
         solvers.put("basic", new BasicSolver());
         solvers.put("random", new RandomSolver());
         // add new solvers here
