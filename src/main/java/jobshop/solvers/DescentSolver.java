@@ -95,11 +95,14 @@ public class DescentSolver implements Solver {
 		int idle = 0;
 		long time = System.currentTimeMillis();
 		while(System.currentTimeMillis()-time<deadline && idle < 3) {
+			idle++;
 			List<Block> block_list = blocksOfCriticalPath(best_sol_order);
 			for (Block b : block_list) {
 				List<Swap> swaps = neighbors(b);
 				for(Swap s : swaps) {
-					s.applyOn(candidate_order);
+					ResourceOrder dupplicate = new ResourceOrder(best_solution);
+					s.applyOn(dupplicate);
+					if(dupplicate.toSchedule() != null) candidate_order = dupplicate;
 					if(best_time>candidate_order.toSchedule().makespan()) {
 						best_solution = candidate_order.toSchedule();
 						best_time = candidate_order.toSchedule().makespan();
@@ -172,7 +175,6 @@ public class DescentSolver implements Solver {
         } 
         else {
 	        for(int i = block.firstTask ; i<=block.lastTask; i++) {
-	        	System.out.println(i + " " + block.machine +" "+ block.firstTask +" "+ block.lastTask);
 	        	if (i<block.lastTask) {
 	        		Swap perm = new Swap(block.machine, i, i+1);
 	        		neighbors.add(perm);

@@ -118,7 +118,9 @@ public class TabooSolver implements Solver {
 				best_tabou = candidate_order.toSchedule();
 				best_tabou_time = candidate_order.toSchedule().makespan();
 				for(Swap s : swaps) {
-					s.applyOn(candidate_order);
+					ResourceOrder dupplicate = new ResourceOrder(best_solution);
+					s.applyOn(dupplicate);
+					if(dupplicate.toSchedule() != null) candidate_order = dupplicate;
 					if(best_tabou_time>candidate_order.toSchedule().makespan()) {
 						if(ListTabou.visited_tabou[s.t1][s.t2]<iterations) {
 						best_tabou = candidate_order.toSchedule();
@@ -203,7 +205,6 @@ public class TabooSolver implements Solver {
         } 
         else {
 	        for(int i = block.firstTask ; i<=block.lastTask; i++) {
-	        	System.out.println(i + " " + block.machine +" "+ block.firstTask +" "+ block.lastTask);
 	        	if (i<block.lastTask) {
 	        		Swap perm = new Swap(block.machine, i, i+1);
 	        		neighbors.add(perm);
