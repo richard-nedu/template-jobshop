@@ -162,10 +162,9 @@ public class TabooSolver implements Solver {
 		
     	for (Task t : critical_path) {
     		path_index++;
+			if(path_index == critical_path.size()) break;
     		Task next_task = critical_path.get(path_index);
     		if(order.instance.machine(t.job,t.task)==order.instance.machine(next_task.job,next_task.task)) {
-    			
-
     			if(!visited.contains(t)) {
 	    			visited.add(t);
 	    			first_task = t;

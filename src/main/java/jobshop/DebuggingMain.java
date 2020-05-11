@@ -18,7 +18,7 @@ public class DebuggingMain {
     public static void main(String[] args) {
         try {
             // load the aaa1 instance
-            Instance instance = Instance.fromFile(Paths.get("instances/ft06"));
+            Instance instance = Instance.fromFile(Paths.get("instances/ft10"));
 
             // construit une solution dans la représentation par
             // numéro de jobs : [0 1 1 0 0 1]
@@ -33,11 +33,11 @@ public class DebuggingMain {
             enc.jobs[enc.nextToSet++] = 0;
             enc.jobs[enc.nextToSet++] = 1; */
 
-        	GreedySolverLRPT solver_init = new GreedySolverLRPT();
+        	/*GreedySolverLRPT solver_init = new GreedySolverLRPT();
         	Schedule sched = solver_init.solve(instance, 15).schedule;
         	TabooSolver taboo = new TabooSolver();
-            System.out.println(taboo.solve(instance, 15).schedule);
-           
+            System.out.println(taboo.solve(instance, 15).schedule); */
+            
         } catch (IOException e) {
             e.printStackTrace();
             System.exit(1);

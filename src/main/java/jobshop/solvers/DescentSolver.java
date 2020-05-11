@@ -129,13 +129,11 @@ public class DescentSolver implements Solver {
 		Task last_task = null;
 		int index_first = 0;
 		int index_last = 0;
-		
     	for (Task t : critical_path) {
     		path_index++;
-    		Task next_task = critical_path.get(path_index);
+			if(path_index == critical_path.size()) break;
+    		Task next_task = critical_path.get(path_index); //error
     		if(order.instance.machine(t.job,t.task)==order.instance.machine(next_task.job,next_task.task)) {
-    			
-
     			if(!visited.contains(t)) {
 	    			visited.add(t);
 	    			first_task = t;
