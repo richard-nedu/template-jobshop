@@ -38,7 +38,6 @@ public class GreedySolverEST_SPT implements Solver {
         for(int job = 0; job < instance.numJobs; job++) {
             int task = nextTask[job];
             int machine = instance.machine(job, task);
-            // earliest start time for this task
             int est = task == 0 ? 0 : startTimes[job][task-1] + instance.duration(job, task-1);
             est = Math.max(est, nextFreeTimeResource[machine]);
 
