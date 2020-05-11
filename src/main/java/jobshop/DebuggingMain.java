@@ -40,10 +40,10 @@ public class DebuggingMain {
             //System.out.println("VALID: " + sched.isValid());
             //System.out.println("MAKESPAN: " + sched.makespan());
             
-            Result result;
-            GreedySolverEST_SPT solver = new GreedySolverEST_SPT();  
-            result = solver.solve(instance, 15);
-            System.out.println(result.schedule.toString());
+           // Result result;
+           // GreedySolverEST_LRPT solver = new GreedySolverEST_LRPT();  
+           // result = solver.solve(instance, 15);
+           // System.out.println(result.schedule.toString());
             
            /* ResourceOrder order = new ResourceOrder(sched);
             System.out.println(order.toString());

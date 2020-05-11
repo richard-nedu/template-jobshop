@@ -35,7 +35,6 @@ public class GreedySolverLRPT implements Solver {
 	public Result solve(Instance instance, long deadline) {
 		Vector<Task> realisable = new Vector<Task>();
 		ResourceOrder sol = new ResourceOrder(instance);
-		
 		for(int j=0; j<instance.numJobs; j++){
 			realisable.add(new Task(j,0));
 		}
