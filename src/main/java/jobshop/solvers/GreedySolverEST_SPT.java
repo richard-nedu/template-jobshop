@@ -14,7 +14,9 @@ import java.util.Scanner;
 import java.util.Vector;
 
 public class GreedySolverEST_SPT implements Solver {
-    
+	int[][] endTimes;
+	boolean[] machines;
+	
 	private Task spt(Vector<Task> tasks, Instance instance){
 		Vector<Task> earliest_tasks = earliest_tasks(tasks, instance);
 		Task current = earliest_tasks.firstElement();
@@ -26,36 +28,47 @@ public class GreedySolverEST_SPT implements Solver {
 			}
 			
 		}
+		apply_time(best, instance);
 		return(best);
 			
 		}
 	
+	
 	private int start_time(Task t, Instance instance) {
-		int[] nextFreeTimeResource = new int[instance.numMachines];
-		int[] nextTask = new int[instance.numJobs];
-		int[][] startTimes = new int[instance.numJobs][instance.numTasks];
+		if(machines[instance.machine(t)]==false) return 0;
+		int time = 0;
+		for(int job = 0; job < instance.numJobs; job++) {
+			for(int task = 0; task < instance.numTasks; task++) {
+				if(instance.machine(t)==instance.machine(job, task)) {
+					if(endTimes[job][task] > time) {
+						time = endTimes[job][task];	
+					}
+				}
+			}
+		}
+		return time;
+	}
 		
-        for(int job = 0; job < instance.numJobs; job++) {
-            int task = nextTask[job];
-            int machine = instance.machine(job, task);
-            int est = task == 0 ? 0 : startTimes[job][task-1] + instance.duration(job, task-1);
-            est = Math.max(est, nextFreeTimeResource[machine]);
-
-            startTimes[job][task] = est;
-            nextFreeTimeResource[machine] = est + instance.duration(job, task);
-            nextTask[job] = task + 1;
-        }
-        
-       /* for(int job = 0 ; job< instance.numJobs ; job++) {
-            for(int task = 0 ; task < instance.numTasks ; task++) {
-                if(tasksAchieved[job][task] != 1 ) {
-                    if(task != t.task && job != t.job) {
-                    	startTimes[job][task] = 0;
-                    }
-                }
-            }
-        } */
-		return startTimes[t.job][t.task];
+	
+	private void apply_time(Task t, Instance instance) {
+		int time = 0;
+		int previous_task[] = new int[2];
+		for(int job = 0; job < instance.numJobs; job++) {
+			for(int task = 0; task < instance.numTasks; task++) {
+				if(instance.machine(t)==instance.machine(job, task)) {
+					if (endTimes[job][task] > time) {
+						time = endTimes[job][task];
+						previous_task[0] = job;
+						previous_task[1] = task;
+					}
+				}
+			}
+		}
+		machines[instance.machine(t)]=true;
+		if(time==0) endTimes[t.job][t.task] = instance.duration(t);
+		else {
+			endTimes[t.job][t.task] = time;
+		}
 	}
 	
 	private Vector<Task> earliest_tasks(Vector<Task> tasks, Instance instance){
@@ -80,7 +93,15 @@ public class GreedySolverEST_SPT implements Solver {
 		
 	@Override
 	public Result solve(Instance instance, long deadline) {
-
+	   	endTimes = new int[instance.numJobs][instance.numTasks];
+	   	machines = new boolean[instance.numMachines];
+	   	
+        for(int m=0; m < instance.numMachines; m++)
+        {        	
+        	machines[m]=false;
+            for(int j=0; j<instance.numJobs; j++) endTimes[m][j]=0;
+        }
+        
 		Vector<Task> realisable = new Vector<Task>();
 		ResourceOrder sol = new ResourceOrder(instance);		
 		for(int j=0; j<instance.numJobs; j++){

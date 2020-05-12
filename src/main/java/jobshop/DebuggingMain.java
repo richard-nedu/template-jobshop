@@ -38,6 +38,13 @@ public class DebuggingMain {
         	TabooSolver taboo = new TabooSolver();
             System.out.println(taboo.solve(instance, 15).schedule); */
             
+        	GreedySolverEST_LRPT solver = new GreedySolverEST_LRPT();
+            System.out.println(solver.solve(instance, 15).schedule.makespan());
+            
+        	GreedySolverEST_SPT solver2 = new GreedySolverEST_SPT();
+            System.out.println(solver2.solve(instance, 15).schedule.makespan());
+
+            
         } catch (IOException e) {
             e.printStackTrace();
             System.exit(1);
