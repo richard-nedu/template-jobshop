@@ -18,7 +18,7 @@ public class DebuggingMain {
     public static void main(String[] args) {
         try {
             // load the aaa1 instance
-            Instance instance = Instance.fromFile(Paths.get("instances/ft10"));
+            Instance instance = Instance.fromFile(Paths.get("instances/ft20"));
 
             // construit une solution dans la représentation par
             // numéro de jobs : [0 1 1 0 0 1]
@@ -33,7 +33,10 @@ public class DebuggingMain {
             enc.jobs[enc.nextToSet++] = 0;
             enc.jobs[enc.nextToSet++] = 1; */
 
-        	//DescentSolver taboo = new DescentSolver();
+        	//TabooSolver taboo = new TabooSolver();
+            //System.out.println(taboo.solve(instance, 15).schedule.makespan()); 
+            
+        	//DescentSolver descent = new DescentSolver();
             //System.out.println(taboo.solve(instance, 15).schedule.makespan()); 
             
         	//GreedySolverEST_LRPT solver = new GreedySolverEST_LRPT();

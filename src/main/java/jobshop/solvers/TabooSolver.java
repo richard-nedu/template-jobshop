@@ -75,20 +75,25 @@ public class TabooSolver implements Solver {
         	Task task;
         	task = order.tasksByMachine[machine][t1];
         	order.tasksByMachine[machine][t1] = order.tasksByMachine[machine][t2];
-        	order.tasksByMachine[machine][t2] = task;        }
+        	order.tasksByMachine[machine][t2] = task;
+        	}
     }
     
 
     
     static class sTabou {
-        int[][] visited_tabou;
+        int[][][] visited_tabou;
         Instance instance;
         sTabou(Instance instance) {
-        	 this.visited_tabou = new int[instance.numMachines][instance.numJobs];
+             int all_tasks = instance.numTasks*instance.numMachines;
+        	 this.visited_tabou = new int[instance.numMachines][all_tasks][all_tasks];
         	 this.instance = instance;
              for(int m=0; m < instance.numMachines; m++)
              {
-                 for(int j=0; j<instance.numJobs; j++) visited_tabou[m][j]=0;
+            	 for(int t1=0; t1 < all_tasks; t1++)
+                 {
+            		 for(int t2=0; t2 < all_tasks; t2++) visited_tabou[m][t1][t2]=0;
+                 }
              }
         }
     }
@@ -102,7 +107,7 @@ public class TabooSolver implements Solver {
     	sTabou ListTabou = new sTabou(instance);
 		Schedule best_solution = result_init.schedule;
 		Schedule best_tabou = result_init.schedule;
-   	 	int [] coord_tabou = new int [2];
+   	 	int [] coord_tabou = new int [3];
 		ResourceOrder best_sol_order = new ResourceOrder(best_solution);
 		ResourceOrder candidate_order = new ResourceOrder(best_solution);
 		int best_time = best_solution.makespan();
@@ -122,11 +127,12 @@ public class TabooSolver implements Solver {
 					s.applyOn(dupplicate);
 					if(dupplicate.toSchedule() != null) candidate_order = dupplicate;
 					if(best_tabou_time>candidate_order.toSchedule().makespan()) {
-						if(ListTabou.visited_tabou[s.t1][s.t2]<iterations) {
+						if(ListTabou.visited_tabou[s.machine][s.t1][s.t2]<iterations) {
 						best_tabou = candidate_order.toSchedule();
 						best_tabou_time = candidate_order.toSchedule().makespan();
-						coord_tabou[0] = s.t1;
-						coord_tabou[1] = s.t2;
+						coord_tabou[0] = s.machine;
+						coord_tabou[1] = s.t1;
+						coord_tabou[2] = s.t2;
 						}
 						else if(best_tabou_time<best_time) {
 							best_solution = candidate_order.toSchedule();
@@ -134,12 +140,13 @@ public class TabooSolver implements Solver {
 							best_sol_order = candidate_order;
 							best_tabou = candidate_order.toSchedule();
 							best_tabou_time = candidate_order.toSchedule().makespan();
-							coord_tabou[0] = s.t1;
-							coord_tabou[1] = s.t2;
+							coord_tabou[0] = s.machine;
+							coord_tabou[1] = s.t1;
+							coord_tabou[2] = s.t2;
 						}
 					}
-
-					ListTabou.visited_tabou[coord_tabou[0]][coord_tabou[1]]=dureeTabou+iterations;
+					
+					ListTabou.visited_tabou[coord_tabou[0]][coord_tabou[1]][coord_tabou[2]]=dureeTabou+iterations;
 				}
 			}
 			iterations++;

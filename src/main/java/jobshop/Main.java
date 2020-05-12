@@ -22,6 +22,8 @@ public class Main {
     private static HashMap<String, Solver> solvers;
     static {
         solvers = new HashMap<>();
+        solvers.put("taboo", new TabooSolver()); 
+        solvers.put("descent", new DescentSolver()); 
         solvers.put("spt", new GreedySolverSPT()); 
         solvers.put("lrpt", new GreedySolverLRPT());
         solvers.put("est_lrpt", new GreedySolverEST_LRPT());
