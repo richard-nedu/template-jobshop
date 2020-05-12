@@ -33,16 +33,14 @@ public class DebuggingMain {
             enc.jobs[enc.nextToSet++] = 0;
             enc.jobs[enc.nextToSet++] = 1; */
 
-        	/*GreedySolverLRPT solver_init = new GreedySolverLRPT();
-        	Schedule sched = solver_init.solve(instance, 15).schedule;
-        	TabooSolver taboo = new TabooSolver();
-            System.out.println(taboo.solve(instance, 15).schedule); */
+        	//DescentSolver taboo = new DescentSolver();
+            //System.out.println(taboo.solve(instance, 15).schedule.makespan()); 
             
-        	GreedySolverEST_LRPT solver = new GreedySolverEST_LRPT();
-            System.out.println(solver.solve(instance, 15).schedule.makespan());
+        	//GreedySolverEST_LRPT solver = new GreedySolverEST_LRPT();
+            //System.out.println(solver.solve(instance, 15).schedule.makespan());
             
-        	GreedySolverEST_SPT solver2 = new GreedySolverEST_SPT();
-            System.out.println(solver2.solve(instance, 15).schedule.makespan());
+        	//GreedySolverEST_SPT solver2 = new GreedySolverEST_SPT();
+            //System.out.println(solver2.solve(instance, 15).schedule.makespan()); 
 
             
         } catch (IOException e) {
